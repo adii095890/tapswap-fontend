@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head><title>Withdraw</title></head>
+<body>
+  <h2>Withdraw Points</h2>
+  <input type="number" id="amount" placeholder="Amount"><br>
+  <input type="text" id="method" placeholder="Method (paypal/wire/crypto)"><br>
+  <input type="text" id="details" placeholder="Details"><br>
+  <button onclick="withdraw()">Request Withdrawal</button>
+  <p id="msg"></p>
+
+  <script>
+    function withdraw() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const method = document.getElementById('method').value;
+      const details = document.getElementById('details').value;
+      fetch('http://localhost:3000/api/withdraw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: 'guest123',
+          name: 'Demo User',
+          amount,
+          method,
+          details: { value: details },
+          timestamp: Date.now()
+        })
+      })
+      .then(res => res.json())
+      .then(data => document.getElementById('msg').innerText = "Withdrawal submitted!")
+      .catch(() => document.getElementById('msg').innerText = "Error occurred");
+    }
+  </script>
+</body>
+</html>
